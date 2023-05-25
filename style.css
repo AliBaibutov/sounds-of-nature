@@ -1,0 +1,231 @@
+/* Reset and base styles  */
+* {
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Links */
+
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Common */
+
+aside,
+nav,
+footer,
+header,
+section,
+main {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+ul,
+ul li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+address {
+  font-style: normal;
+}
+
+/* Form */
+
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background-color: transparent;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button,
+input[type="submit"] {
+  display: inline-block;
+  box-shadow: none;
+  background-color: transparent;
+  background: none;
+  cursor: pointer;
+}
+
+input:focus,
+input:active,
+button:focus,
+button:active {
+  outline: none;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+label {
+  cursor: pointer;
+}
+
+legend {
+  display: block;
+}
+
+/* Подключение шрифтов */
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Italic.ttf");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Thin.ttf");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-ThinItalic.ttf");
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-LightItalic.ttf");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Medium.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-MediumItalic.ttf");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-BoldItalic.ttf");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-Black.ttf");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("./files/fonts/Roboto-BlackItalic.ttf");
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* Project styles */
+
+body {
+  min-height: 100vh;
+  background-image: url("./files/assets/summer-bg.jpg");
+  backdrop-filter: blur(8px);
+}
+
+h1 {
+  font-family: Roboto;
+  font-weight: 900;
+  color: orange;
+  text-align: center;
+  padding: 10px 0 10px 0;
+  font-size: 40px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.card {
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+}
+
+.card__img-back {
+  width: 250px;
+  height: 250px;
+  border: 1px solid #c0c0c0;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.card__img-btn {
+  position: relative;
+  bottom: 137px;
+  left: 113px;
+}
