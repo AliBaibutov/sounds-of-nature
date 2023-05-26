@@ -34,6 +34,7 @@ const cardsData: CardsData[] = [
 renderCardsList(cardsData);
 
 // Функция рендера карточек
+
 function renderCardsList(cardsList: CardsData[]) {
   const title = document.querySelector("h1");
   title?.insertAdjacentHTML("afterend", `<div class="card-container"></div>`);
@@ -41,17 +42,25 @@ function renderCardsList(cardsList: CardsData[]) {
 
   // Отрисовка карточек
   cardsList.forEach((card) => renderCard(card, cardsContainer));
+
+  // Слушатели кликов по иконке
+  const icons = document.querySelectorAll(".card__img-btn");
+
+  icons.forEach((icon, i) => {
+    icon.addEventListener("click", () => {
+      handleIconClick(cardsData, i);
+    });
+  });
 }
 
 // Функция отрисовки карточки
 function renderCard(card: CardsData, targetContainer: Element | null) {
-  const { id, imgSrc, soundSrc, btnImgSrc } = card;
+  const { id, imgSrc, btnImgSrc } = card;
   const btnImg = card.isPaused ? btnImgSrc : "./files/assets/icons/pause.svg";
 
   targetContainer?.insertAdjacentHTML(
     "beforeend",
     `<div id=${id} class="card">
-      <audio src=${soundSrc}></audio>
       <img
         src=${imgSrc}
         class="card__img-back"
@@ -64,4 +73,23 @@ function renderCard(card: CardsData, targetContainer: Element | null) {
       />
     </div>`
   );
+}
+
+// Функция обработчик для смены иконки при клике
+function handleIconClick(cardsList: CardsData[], i: number) {
+  cardsList[i].isPaused = !cardsList[i].isPaused;
+  const targetContainer = document.querySelector(".card-container");
+  targetContainer?.remove();
+  renderCardsList(cardsList);
+
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card?.insertAdjacentHTML(
+      "afterbegin",
+      `<audio src=${cardsList[i].soundSrc}></audio>`
+    );
+  });
+
+  const audio = document.querySelector("audio");
+  !cardsList[i].isPaused ? audio?.play() : audio?.pause();
 }
