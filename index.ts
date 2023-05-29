@@ -38,10 +38,21 @@ renderCardsList(cardsData);
 function renderCardsList(cardsList: CardsData[]) {
   const title = document.querySelector("h1");
   title?.insertAdjacentHTML("afterend", `<div class="card-container"></div>`);
+
   const cardsContainer = document.querySelector(".card-container");
 
   // Отрисовка карточек
   cardsList.forEach((card) => renderCard(card, cardsContainer));
+
+  // Добавления регулировки громкости
+  cardsContainer?.insertAdjacentHTML(
+    "afterend",
+    `
+    <div class = volume-control>
+      <input id="range" min="0" max="100" value="50" type="range">
+    </div>
+    `
+  );
 
   // Слушатели кликов по иконке
   const icons = document.querySelectorAll(".card__img-btn");
@@ -56,7 +67,7 @@ function renderCardsList(cardsList: CardsData[]) {
 // Функция отрисовки карточки
 function renderCard(card: CardsData, targetContainer: Element | null) {
   const { id, imgSrc, btnImgSrc } = card;
-  const btnImg = card.isPaused ? btnImgSrc : "./files/assets/icons/pause.svg";
+  // const btnImg = card.isPaused ? btnImgSrc : "./files/assets/icons/pause.svg";
 
   targetContainer?.insertAdjacentHTML(
     "beforeend",
@@ -67,7 +78,7 @@ function renderCard(card: CardsData, targetContainer: Element | null) {
         alt="Лето"
       />
       <img
-        src=${btnImg}
+        src=${btnImgSrc}
         class="card__img-btn"
         alt="Воспроизвести"
       />
@@ -78,18 +89,57 @@ function renderCard(card: CardsData, targetContainer: Element | null) {
 // Функция обработчик для смены иконки при клике
 function handleIconClick(cardsList: CardsData[], i: number) {
   cardsList[i].isPaused = !cardsList[i].isPaused;
+
   const targetContainer = document.querySelector(".card-container");
+  const volumeControl = document.querySelector(".volume-control");
+
   targetContainer?.remove();
+  volumeControl?.remove();
+
   renderCardsList(cardsList);
 
   const cards = document.querySelectorAll(".card");
-  cards.forEach((card) => {
-    card?.insertAdjacentHTML(
-      "afterbegin",
-      `<audio src=${cardsList[i].soundSrc}></audio>`
-    );
-  });
+  const audioElems = targetContainer?.querySelectorAll("audio");
 
-  const audio = document.querySelector("audio");
-  !cardsList[i].isPaused ? audio?.play() : audio?.pause();
+  audioElems?.forEach((audioElem) => audioElem.remove());
+
+  cards[i].insertAdjacentHTML(
+    "afterbegin",
+    `<audio src=${cardsList[i].soundSrc}></audio>
+    `
+  );
+  changeIcon(cards, i, cardsList);
+
+  // Изменение громкости
+  const volumeControlRange = document.getElementById(
+    "range"
+  ) as HTMLInputElement;
+
+  const audioElement: HTMLAudioElement | null = document.querySelector("audio");
+
+  volumeControlRange?.addEventListener("change", () => {
+    audioElement
+      ? (audioElement.volume = Number(volumeControlRange.value) / 100)
+      : null;
+  });
+}
+
+// Функция для проверки наличия audio элемента и замены иконки
+function changeIcon(
+  cards: NodeListOf<Element>,
+  i: number,
+  cardsList: CardsData[]
+) {
+  const isPaused = cardsList[i].isPaused;
+
+  const audioElem = cards[i].querySelector("audio");
+  const icon = cards[i].querySelector(".card__img-btn");
+
+  if (!isPaused) {
+    audioElem?.play();
+    (icon as HTMLImageElement).src = "./files/assets/icons/pause.svg";
+  } else {
+    audioElem?.pause();
+    (icon as HTMLImageElement).src = cardsList[i].btnImgSrc;
+  }
 }

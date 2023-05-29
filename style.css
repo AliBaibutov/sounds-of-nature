@@ -229,3 +229,8 @@ h1 {
   bottom: 137px;
   left: 113px;
 }
+
+.volume-control {
+  text-align: center;
+  margin-top: 10px;
+}
