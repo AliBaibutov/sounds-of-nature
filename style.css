@@ -216,7 +216,7 @@ h1 {
   cursor: pointer;
 }
 
-.card__img-back {
+.card__back {
   width: 250px;
   height: 250px;
   border: 1px solid #c0c0c0;
@@ -224,10 +224,32 @@ h1 {
   object-fit: cover;
 }
 
-.card__img-btn {
+.card__weather {
+  width: 30px;
+  height: 30px;
   position: relative;
   bottom: 137px;
   left: 113px;
+}
+
+.card__summer-btn {
+  background: url("./files/assets/icons/sun.svg");
+  background-repeat: no-repeat;
+}
+
+.card__rain-btn {
+  background: url("./files/assets/icons/cloud-rain.svg");
+  background-repeat: no-repeat;
+}
+
+.card__winter-btn {
+  background: url("./files/assets/icons/cloud-snow.svg");
+  background-repeat: no-repeat;
+}
+
+.pause {
+  background: url("./files/assets/icons/pause.svg");
+  background-repeat: no-repeat;
 }
 
 .volume-control {

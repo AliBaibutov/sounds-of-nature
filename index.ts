@@ -1,48 +1,56 @@
-interface CardsData {
-  id: number;
-  imgSrc: string;
-  soundSrc: string;
-  btnImgSrc: string;
-  isPaused: boolean;
-}
+let isPaused = true;
 
-const cardsData: CardsData[] = [
-  {
-    id: 1,
-    imgSrc: "./files/assets/summer-bg.jpg",
-    soundSrc: "./files/assets/sounds/summer.mp3",
-    btnImgSrc: "./files/assets/icons/sun.svg",
-    isPaused: true,
-  },
-  {
-    id: 2,
-    imgSrc: "./files/assets/rainy-bg.jpg",
-    soundSrc: "./files/assets/sounds/rain.mp3",
-    btnImgSrc: "./files/assets/icons/cloud-rain.svg",
-    isPaused: true,
-  },
-  {
-    id: 3,
-    imgSrc: "./files/assets/winter-bg.jpg",
-    soundSrc: "./files/assets/sounds/winter.mp3",
-    btnImgSrc: "./files/assets/icons/cloud-snow.svg",
-    isPaused: true,
-  },
-];
-
-// Отображение карточек
-renderCardsList(cardsData);
+// Отображение страницы
+renderCardsList();
 
 // Функция рендера карточек
 
-function renderCardsList(cardsList: CardsData[]) {
+function renderCardsList() {
   const title = document.querySelector("h1");
   title?.insertAdjacentHTML("afterend", `<div class="card-container"></div>`);
 
   const cardsContainer = document.querySelector(".card-container");
 
   // Отрисовка карточек
-  cardsList.forEach((card) => renderCard(card, cardsContainer));
+  cardsContainer?.insertAdjacentHTML(
+    "beforeend",
+    `<div class="card">
+      <img
+        src="./files/assets/summer-bg.jpg"
+        class="card__back"
+        alt="Лето"
+      />
+      <div
+        class="card__weather card__summer-btn"
+      >
+      </div>
+      <audio src="./files/assets/sounds/summer.mp3"></audio>
+    </div>
+    <div class="card">
+      <img
+        src="./files/assets/rainy-bg.jpg"
+        class="card__back"
+        alt="Дождь"
+      />
+      <div
+        class="card__weather card__rain-btn"
+      >
+      </div>
+      <audio src="./files/assets/sounds/rain.mp3"></audio>
+    </div>
+    <div class="card">
+      <img
+        src="./files/assets/winter-bg.jpg"
+        class="card__back"
+        alt="Зима"
+      />
+      <div
+        class="card__weather card__winter-btn"
+      >
+      </div>
+      <audio src="./files/assets/sounds/winter.mp3"></audio>
+    </div>`
+  );
 
   // Добавления регулировки громкости
   cardsContainer?.insertAdjacentHTML(
@@ -54,92 +62,85 @@ function renderCardsList(cardsList: CardsData[]) {
     `
   );
 
-  // Слушатели кликов по иконке
-  const icons = document.querySelectorAll(".card__img-btn");
-
-  icons.forEach((icon, i) => {
-    icon.addEventListener("click", () => {
-      handleIconClick(cardsData, i);
-    });
-  });
-}
-
-// Функция отрисовки карточки
-function renderCard(card: CardsData, targetContainer: Element | null) {
-  const { id, imgSrc, btnImgSrc } = card;
-  // const btnImg = card.isPaused ? btnImgSrc : "./files/assets/icons/pause.svg";
-
-  targetContainer?.insertAdjacentHTML(
-    "beforeend",
-    `<div id=${id} class="card">
-      <img
-        src=${imgSrc}
-        class="card__img-back"
-        alt="Лето"
-      />
-      <img
-        src=${btnImgSrc}
-        class="card__img-btn"
-        alt="Воспроизвести"
-      />
-    </div>`
-  );
-}
-
-// Функция обработчик для смены иконки при клике
-function handleIconClick(cardsList: CardsData[], i: number) {
-  cardsList[i].isPaused = !cardsList[i].isPaused;
-
-  const targetContainer = document.querySelector(".card-container");
-  const volumeControl = document.querySelector(".volume-control");
-
-  targetContainer?.remove();
-  volumeControl?.remove();
-
-  renderCardsList(cardsList);
-
-  const cards = document.querySelectorAll(".card");
-  const audioElems = targetContainer?.querySelectorAll("audio");
-
-  audioElems?.forEach((audioElem) => audioElem.remove());
-
-  cards[i].insertAdjacentHTML(
-    "afterbegin",
-    `<audio src=${cardsList[i].soundSrc}></audio>
-    `
-  );
-  changeIcon(cards, i, cardsList);
-
   // Изменение громкости
   const volumeControlRange = document.getElementById(
     "range"
   ) as HTMLInputElement;
 
-  const audioElement: HTMLAudioElement | null = document.querySelector("audio");
+  const audioElems = cardsContainer?.querySelectorAll("audio");
 
-  volumeControlRange?.addEventListener("change", () => {
-    audioElement
-      ? (audioElement.volume = Number(volumeControlRange.value) / 100)
-      : null;
+  audioElems?.forEach((audioElem) => {
+    audioElem.volume = 0.5;
+    volumeControlRange?.addEventListener("change", () => {
+      audioElem.volume = Number(volumeControlRange.value) / 100;
+    });
   });
-}
 
-// Функция для проверки наличия audio элемента и замены иконки
-function changeIcon(
-  cards: NodeListOf<Element>,
-  i: number,
-  cardsList: CardsData[]
-) {
-  const isPaused = cardsList[i].isPaused;
+  // Функция замены фона
+  function changeBackground(icon: Element) {
+    const body = document.querySelector("body");
+    const sound = icon.nextElementSibling as HTMLAudioElement;
+    const soundSrc = sound.src.slice(22, sound.src.length + 1);
 
-  const audioElem = cards[i].querySelector("audio");
-  const icon = cards[i].querySelector(".card__img-btn");
-
-  if (!isPaused) {
-    audioElem?.play();
-    (icon as HTMLImageElement).src = "./files/assets/icons/pause.svg";
-  } else {
-    audioElem?.pause();
-    (icon as HTMLImageElement).src = cardsList[i].btnImgSrc;
+    switch (soundSrc) {
+      case "files/assets/sounds/summer.mp3":
+        body
+          ? (body.style.backgroundImage = "url('./files/assets/summer-bg.jpg')")
+          : null;
+        break;
+      case "files/assets/sounds/rain.mp3":
+        body
+          ? (body.style.backgroundImage = "url('./files/assets/rainy-bg.jpg')")
+          : null;
+        break;
+      case "files/assets/sounds/winter.mp3":
+        body
+          ? (body.style.backgroundImage = "url('./files/assets/winter-bg.jpg')")
+          : null;
+        break;
+    }
   }
+
+  // Удаляем иконку паузы со всех карточек и ставим все аудио на паузу
+  const icons = document.querySelectorAll(".card__weather");
+
+  function removePauseAndActiveClasses() {
+    icons.forEach((icon) => {
+      const sound = icon.nextElementSibling as HTMLAudioElement;
+      icon.classList.remove("pause");
+      icon.classList.remove("active");
+      sound.pause();
+    });
+  }
+
+  // Слушатели кликов по иконке
+  icons.forEach((icon) => {
+    const sound = icon.nextElementSibling as HTMLAudioElement;
+    icon.addEventListener("click", () => {
+      changeBackground(icon);
+
+      if (icon.classList.contains("pause")) {
+        icon.classList.remove("pause");
+        sound.pause();
+        isPaused = true;
+        return;
+      } else {
+        icon.classList.add("pause");
+        sound.play();
+        isPaused = false;
+      }
+
+      if (!icon.classList.contains("active")) {
+        sound.currentTime = 0;
+      }
+
+      removePauseAndActiveClasses();
+
+      if (!isPaused) {
+        icon.classList.add("pause");
+        icon.classList.add("active");
+        sound.play();
+      }
+    });
+  });
 }
