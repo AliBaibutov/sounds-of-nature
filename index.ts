@@ -79,25 +79,23 @@ function renderCardsList() {
   // Функция замены фона
   function changeBackground(icon: Element) {
     const body = document.querySelector("body");
-    const sound = icon.nextElementSibling as HTMLAudioElement;
-    const soundSrc = sound.src.slice(22, sound.src.length + 1);
 
-    switch (soundSrc) {
-      case "files/assets/sounds/summer.mp3":
-        body
-          ? (body.style.backgroundImage = "url('./files/assets/summer-bg.jpg')")
-          : null;
-        break;
-      case "files/assets/sounds/rain.mp3":
-        body
-          ? (body.style.backgroundImage = "url('./files/assets/rainy-bg.jpg')")
-          : null;
-        break;
-      case "files/assets/sounds/winter.mp3":
-        body
-          ? (body.style.backgroundImage = "url('./files/assets/winter-bg.jpg')")
-          : null;
-        break;
+    if (icon.classList.contains("card__summer-btn")) {
+      body
+        ? (body.style.backgroundImage = "url('./files/assets/summer-bg.jpg')")
+        : null;
+    }
+
+    if (icon.classList.contains("card__rain-btn")) {
+      body
+        ? (body.style.backgroundImage = "url('./files/assets/rainy-bg.jpg')")
+        : null;
+    }
+
+    if (icon.classList.contains("card__winter-btn")) {
+      body
+        ? (body.style.backgroundImage = "url('./files/assets/winter-bg.jpg')")
+        : null;
     }
   }
 
